@@ -18,14 +18,14 @@
   </description>
   <!-- OBS-ExclusiveArch: aarch64 -->
   <preferences>
-    <type image="oem" initrd_system="dracut" filesystem="ext4" fsmountoptions="noatime,nobarrier" bootloader="grub2" firmware="efi" efipartsize="64" editbootinstall="uboot-image-raspberrypi-install" kernelcmdline="loglevel=3" disk_start_sector="8192">
+    <type image="oem" initrd_system="dracut" filesystem="ext4" fsmountoptions="noatime,nobarrier" bootloader="grub2" firmware="efi" efipartsize="64" editbootinstall="uboot-image-raspberrypi-install" kernelcmdline="loglevel=3 splash=silent plymouth.enable=0 console=ttyS0,115200n8" disk_start_sector="8192">
       <oemconfig>
         <oem-swap>true</oem-swap>
         <oem-swapsize>500</oem-swapsize>
         <oem-skip-verify>true</oem-skip-verify>
       </oemconfig>
     </type>
-    <version>2021.02.24</version>
+    <version>2021.05.31</version>
     <packagemanager>zypper</packagemanager>
     <locale>en_US</locale>
     <keytable>us.map.gz</keytable>
@@ -33,7 +33,7 @@
     <hwclock>utc</hwclock>
     <rpm-excludedocs>true</rpm-excludedocs>
     <bootloader-theme>openSUSE</bootloader-theme>
-    <bootsplash-theme>openSUSE</bootsplash-theme>
+    <bootsplash-theme>bgrt</bootsplash-theme>
   </preferences>
   <users group="root">
     <user password="$1$wYJUgpM5$RXMMeASDc035eX.NbYWFl0" home="/root" name="root"/>
@@ -42,118 +42,124 @@
     <source path="http://download.opensuse.org/distribution/leap/15.3/repo/oss/"/>
   </repository>
   <packages type="bootstrap">
-<!--
-    <package name="kiwi-image-oem-requires"/>
-    <package name="kiwi-systemdeps-core"/>
--->
-    <package name="libyui-ncurses-pkg15"/>
-
     <package name="kernel-default" bootinclude="true"/>
+    <!-- Since Leap 15.3, kernel is split in multiple packages -->
+    <package name="kernel-default-extra" bootinclude="true"/>
+    <package name="kernel-default-optional" bootinclude="true"/>
     <package name="raspberrypi-firmware" bootinclude="true"/>
     <package name="raspberrypi-firmware-config" bootinclude="true"/>
     <package name="raspberrypi-firmware-dt" bootinclude="true"/>
     <package name="u-boot-rpiarm64" bootinclude="true"/>
     <package name="raspberrypi-eeprom"/>
     <package name="bcm43xx-firmware"/>
-
-
     <!-- JeOS: Base patterns -->
     <package name="patterns-base-base"/>
-<!--
     <package name="patterns-base-basesystem"/>
     <package name="patterns-base-console"/>
     <package name="patterns-base-sw_management"/>
-    <package name="ncurses-utils"/>
-    <package name="libgomp1"/>
-    <package name="gettext-runtime"/>
-    <package name="gio-branding-openSUSE"/>
-    <package name="kernel-firmware-all"/>
--->
     <!-- JeOS: Additonal base packages -->
     <package name="aaa_base-extras"/>
+    <package name="acl"/>
+    <package name="alsa"/>
+    <package name="branding-openSUSE"/>
+    <package name="bzip2"/>
     <package name="dtc"/>
-    <package name="busybox"/>
+    <package name="ca-certificates"/>
+    <package name="ca-certificates-mozilla"/>
+    <package name="cpupower"/>
+    <package name="cracklib-dict-small"/>
     <!-- Avoid the big 10MiB one -->
     <package name="dracut"/>
+    <package name="e2fsprogs"/>
     <package name="filesystem"/>
+    <package name="fipscheck"/>
+    <package name="firewalld"/>
+    <package name="gettext-runtime"/>
     <!-- Do not use gettext-runtime-mini-->
+    <package name="gio-branding-openSUSE"/>
+    <package name="glibc-locale"/>
+    <package name="gpg2"/>
     <package name="gptfdisk" bootinclude="true"/>
     <package name="grub2" bootinclude="true"/>
-
     <package name="grub2-branding-openSUSE" bootinclude="true"/>
-
     <package name="grub2-arm64-efi" bootinclude="true"/>
+    <package name="irqbalance"/>
+    <!--<package name="gvfs-common"/> -->
+    <package name="iproute2"/>
+    <package name="iputils"/>
+    <package name="issue-generator"/>
     <!-- Required to have a banner -->
     <package name="iw"/>
+    <package name="jeos-firstboot"/>
+    <package name="kernel-firmware-all"/>
     <package name="kmod"/>
+    <package name="krb5"/>
+    <!-- Do not use krb5-mini -->
     <package name="less"/>
     <package name="libudev1"/>
+    <!-- Do not use libudev-mini1 -->
+    <package name="libyui-ncurses-pkg"/>
+    <package name="lsof"/>
+    <!-- For zypper ps (bsc#1167553) -->
+    <package name="ncurses-utils"/>
     <package name="net-tools"/>
+    <package name="ntfs-3g"/>
+    <package name="ntfsprogs"/>
+    <!-- JeOS: we need to keep our time in sync with chrony, because there is no RTC -->
+    <package name="chrony"/>
+    <package name="openssh"/>
     <package name="openSUSE-build-key"/>
     <package name="openSUSE-release"/>
     <!-- Available only for Leap: <package name="openSUSE-release-appliance-custom"/> -->
     <!-- Tumbleweed uses openSUSE-release-ftp -->
     <package name="openSUSE-release-ftp"/>
     <package name="pam"/>
+    <!-- Previously pam_cracklib was part of pam, but the replacement is only recommended -->
+    <package name="pam_pwquality"/>
+    <!-- rsync is expected on JeOS -->
+    <package name="rsync"/>
     <package name="shadow"/>
+    <package name="sudo"/>
     <package name="sysconfig"/>
     <package name="sysconfig-netconfig"/>
     <package name="system-group-hardware" bootinclude="true"/>
     <package name="system-user-lp" bootinclude="true"/>
     <package name="systemd"/>
     <!-- avoid using systemd-mini -->
+    <package name="systemd-presets-branding-openSUSE"/>
     <package name="systemd-sysvinit"/>
     <package name="systemd-logger"/>
     <package name="timezone"/>
     <package name="udev"/>
+    <package name="upower"/>
+    <package name="usbutils"/>
     <package name="util-linux-systemd"/>
     <package name="vim"/>
+    <package name="wget"/>
     <package name="which"/>
+    <package name="wireless-tools"/>
+    <package name="wpa_supplicant"/>
+    <package name="yast2-firewall"/>
+    <package name="yast2-users"/>
+    <package name="zypper"/>
+    <package name="zypper-aptitude"/>
     <!-- JeOS: multiple choices -->
     <package name="libgcc_s1"/>
+    <package name="libgomp1"/>
     <package name="libsystemd0"/>
     <!-- avoid using libsystemd0-mini -->
+    <package name="unzip"/>
     <!--Do not install both wicked and Network Manager - boo#1141433-->
     <package name="wicked"/>
     <package name="wicked-service"/>
   </packages>
   <packages type="delete">
-    <package name="patterns-base-base"/>
-    <package name="zypper"/>
-    <package name="aaa_base-malloccheck"/>
-    <package name="purge-kernels-service"/>
-    <package name="glibc-locale"/>
-  <!-- using busybox by default, you may want to remove further packages from base pattern
-    <package name="rpm"/>
-    <package name="aaa_base"/>
-    <package name="bash"/>
-    <package name="ca-certificates-mozilla"/>
-    <package name="coreutils"/>
-    <package name="glibc"/>
-    <package name="libnss_usrfiles2"/>
-    <package name="pam"/>
-    <package name="pam-config"/>
-    <package name="sysconfig"/>
-    <package name="system-user-nobody"/>
-    <package name="systemd"/>
-    <package name="util-linux"/>
-
-    <package name="libyui-ncurses-pkg15"/>
-    <package name="libzypp"/>
-    <package name="btrfsprogs-udev-rules"/>
-    <package name="lvm2"/>
-    <package name="parted"/>
-    <package name="mdadm"/>
-  -->
-    <package name="xfsprogs"/>
-    <package name="btrfsprogs"/>
-    <package name="dracut-kiwi-lib"/>
-    <package name="dracut-kiwi-oem-repart"/>
+    <!-- not needed at runtime, but removing would happen too early
+                <package name="qemu-linux-user-arm" />
+-->
   </packages>
   <packages type="image">
     <package name="dracut-kiwi-oem-repart"/>
-  <!--
     <package name="live-add-yast-repos"/>
-  -->
   </packages>
 </image>
